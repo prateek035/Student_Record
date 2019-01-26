@@ -3,14 +3,20 @@
 from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import render
-
-
+from django.core.paginator import Paginator
 
 
 from .models import School, Book, Student
 
 def student_list(request):
 	students = Student.objects.all()
+
+	paginator = Paginator(students, 4)
+	
+	page = request.GET.get('page')
+
+	students = paginator.get_page(page)
+
 
 	return render(request, "students/student_list.html", 
 		         {'students':students})
@@ -22,17 +28,20 @@ def student_detail(request, sid):
 		{'student':student})
 	
 
-def search(request):
-	template = 'students/student_list.html'
+def search(request): 
 	query = request.GET.get('q')
+	print('coming')
+	print(query)
+	if query != None:
+		request.session['query'] = query
 
 
-	try:
-		students = Student.objects.filter(Q(sid= int(query)))
-		return render(request, template, {'students':students})
-	except:
-		pass
+	students = Student.objects.filter(Q(fname__contains = request.session['query'])| 
+		                              Q(lname__contains = request.session['query']))
+	
+	paginator = Paginator(students, 4)
+	page = request.GET.get('page')
+	students = paginator.get_page(page)
 
-	students = Student.objects.filter(Q(fname__contains = query))
-
-	return render(request, template, {'students':students})
+	return render(request, 'students/student_list.html', 
+		   {'students':students})

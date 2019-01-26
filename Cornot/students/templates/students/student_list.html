@@ -1,21 +1,31 @@
 
 {% extends 'base_layout.html' %}
 
+
+{% load crispy_forms_tags %}
+
 {% block content %}
+	<center>
 	<h1> Student Record </h1>
 	<hr/>
-
+	
 	<form method="GET" action="{% url 'search' %}">
-		<input name = "q" value="{{request.GET.q}}" placeholder="Search ..">
-		<button  type="submit">
+
+		<input name = "q" value="{{request.GET.q}}" class="form-control " placeholder="Search .." >
+		{{form |crispy }}
+		<br/>
+		
+		<button  type="submit" class = "btn btn-success">
 			Search
 		</button>
+	</center>
 	</form>
 
 
-	<div class = "students">
+	<center>
+	<div class = "col-xs-12">
 		{% for student in students %}
-			<div class = "student">
+			<div >
 				<h3> StudentID: 
 				   <a href = "{% url 'detail' sid=student.sid %}"> {{ student.id }}</a></h3>
 				<p> Name: {{ student.fname }} {{ student.lname }} </p>
@@ -23,4 +33,25 @@
 			</div>
 		{% endfor %}
 	</div>
+</center>
+<center>
+	<div class="pagination">
+	    <span class="step-links">
+	        {% if students.has_previous %}
+	            <a href="?page=1" class="btn btn-info"  >&laquo; First </a>
+	            <a href="?page={{ students.previous_page_number }}" class="btn btn-info" > Previous </a>
+	        {% endif %}
+
+	        <a href="?page={{ students.number }}" class="btn btn-info" > Page {{ students.number }} of {{ students.paginator.num_pages }}. </a>
+
+	       
+
+	        {% if students.has_next %}
+	            <a href="?page={{ students.next_page_number }}" class="btn btn-info" > Next </a>
+	            <a href="?page={{ students.paginator.num_pages }}"class="btn btn-info" > Last &raquo;</a>
+	        {% endif %}
+	    </span>
+	</div>
+</center>
+
 {% endblock %}

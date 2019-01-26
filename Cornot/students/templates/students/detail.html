@@ -2,11 +2,12 @@
 {% extends 'base_layout.html' %}
 
 {% block content %}
+<center>
 	<h1> Student Record </h1>
 	<hr/>
 		<div class = "student">
 			<h3> StudentID: 
-			   <a href = "{% url 'detail' sid=student.sid %}"> {{ student.id }}</a></h3>
+			   <a href = "{% url 'detail' sid=student.sid %}" > {{ student.id }}</a></h3>
 				<p> Name: {{ student.fname }} {{ student.lname }} </p>
 				<p> Email: {{ student.email }}</p>
 				<div class="book_list"><p> Books: {% for boook in student.book.all %}</p>
@@ -15,4 +16,5 @@
 				{% endfor %}
 				<p> School: {{student.school.sname}} ( {{student.school.affiliation}} affiliated) </p>
 	</div>
+</center>
 {% endblock %}

@@ -1,8 +1,6 @@
 from django.db import models
 
-# Create your models here.
-
-
+ 
 class School(models.Model):
 	sname       = models.CharField(max_length = 100)
 	affiliation = models.CharField(max_length = 10, default = "CBSE") 
@@ -33,6 +31,10 @@ class Student(models.Model):
 
 	def __str__(self):
 		return self.fname + " " + self.lname
+
+		
+
+
 
 
 
